@@ -37,3 +37,15 @@ app.get('/allalbums', async (req, res) => {
     }
 });
 
+app.post('/addalbum', async (req, res) => {
+    const { album_name, album_cover_art } = req.body;
+    try {
+        let connection = await mysql.createConnection(dbConfig);
+        await connection.execute('INSERT INTO tyler_the_creator_albums (album_name, album_cover_art) VALUES (?, ?)', [album_name, album_cover_art]);
+        res.status(201).json({ message: album_name+' album added successfully'});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error - could not add '+album_name+' album' });
+    }
+});
+
