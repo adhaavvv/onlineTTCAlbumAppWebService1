@@ -49,3 +49,33 @@ app.post('/addalbum', async (req, res) => {
     }
 });
 
+app.put('/updatealbum/:id', async (req, res) => {
+    const { album_name, album_cover_art } = req.body;
+    const albumId = req.params.id;
+
+    try {
+        let connection = await mysql.createConnection(dbConfig);
+
+        const sql = `
+            UPDATE tyler_the_creator_albums
+            SET album_name = ?, album_cover_art = ?
+            WHERE album_id = ?
+        `;
+
+        const [result] = await connection.execute(sql, [
+            album_name,
+            album_cover_art,
+            albumId
+        ]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Album not found' });
+        }
+
+        res.json({ message: album_name+' album updated successfully' });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error - could not update album' });
+    }
+});
