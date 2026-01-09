@@ -59,7 +59,7 @@ app.put('/updatealbum/:id', async (req, res) => {
         const sql = `
             UPDATE tyler_the_creator_albums
             SET album_name = ?, album_cover_art = ?
-            WHERE album_id = ?
+            WHERE id = ?
         `;
 
         const [result] = await connection.execute(sql, [
