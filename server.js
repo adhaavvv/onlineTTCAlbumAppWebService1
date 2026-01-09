@@ -80,6 +80,32 @@ app.put('/updatealbum/:id', async (req, res) => {
     }
 });
 
+app.delete('/deletealbum/:id', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const connection = await mysql.createConnection(dbConfig);
+
+        const sql = `
+      DELETE FROM tyler_the_creator_albums
+      WHERE id = ?
+    `;
+
+        const [result] = await connection.execute(sql, [id]);
+        await connection.end();
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Album not found' });
+        }
+
+        res.json({ message: 'Album deleted successfully' });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error - could not delete album' });
+    }
+});
+
 
 
 
