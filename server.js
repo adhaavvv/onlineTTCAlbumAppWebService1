@@ -51,7 +51,7 @@ app.post('/addalbum', async (req, res) => {
 
 app.put('/updatealbum/:id', async (req, res) => {
     const { album_name, album_cover_art } = req.body;
-    const albumId = req.params.id;
+    const id = req.params.id;
 
     try {
         let connection = await mysql.createConnection(dbConfig);
@@ -65,7 +65,7 @@ app.put('/updatealbum/:id', async (req, res) => {
         const [result] = await connection.execute(sql, [
             album_name,
             album_cover_art,
-            albumId
+            id
         ]);
 
         if (result.affectedRows === 0) {
